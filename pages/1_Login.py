@@ -24,6 +24,7 @@ def login_signup_page():
 def signup_user(name, email, password):
     try:
         conn = get_connection()
+        conn.start_transaction(isolation_level='SERIALIZABLE')
         cursor = conn.cursor()
 
         args = [name, email, password, 0]  # last is OUT param
