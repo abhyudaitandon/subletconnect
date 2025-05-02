@@ -1,0 +1,15 @@
+# Ignore Python virtual environments
+.venv/
+venv/
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# OS metadata
+.DS_Store
+
+# Streamlit-generated configs (optional)
+.streamlit/secrets.toml
