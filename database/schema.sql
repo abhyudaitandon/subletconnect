@@ -1,3 +1,5 @@
+USE subletconnect;
+
 -- Drop existing tables (helpful for dev)
 DROP TABLE IF EXISTS Listings;
 DROP TABLE IF EXISTS Apartments;
@@ -35,3 +37,6 @@ CREATE TABLE Listings (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (apartment_id) REFERENCES Apartments(apartment_id) ON DELETE CASCADE
 );
+
+CREATE INDEX idx_apartments_user_id ON Apartments(user_id);
+CREATE INDEX idx_listings_apartment_id ON Listings(apartment_id);
