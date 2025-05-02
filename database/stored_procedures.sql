@@ -1,5 +1,6 @@
 DROP PROCEDURE IF EXISTS SignupUser;
 DELIMITER $$
+
 CREATE PROCEDURE SignupUser(
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
@@ -8,20 +9,29 @@ CREATE PROCEDURE SignupUser(
 )
 BEGIN
     DECLARE email_count INT DEFAULT 0;
-    
+
+    -- Start a SERIALIZABLE transaction
+    START TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+    -- Check if email already exists
     SELECT COUNT(*) INTO email_count
     FROM Users
     WHERE email = p_email;
-    
+
     IF email_count > 0 THEN
-        SET p_new_user_id = -1;  -- email in use
+        -- Email is already taken
+        SET p_new_user_id = -1;
+        ROLLBACK;
     ELSE
+        -- Safe to insert
         INSERT INTO Users(name, email, password)
         VALUES(p_name, p_email, p_password);
-        
+
         SET p_new_user_id = LAST_INSERT_ID();
+        COMMIT;
     END IF;
 END$$
+
 DELIMITER ;
 
 DROP PROCEDURE IF EXISTS LoginUser;
