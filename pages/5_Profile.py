@@ -69,6 +69,7 @@ def update_user_info(user_id, name, email):
     """Prepared statement to update user's name and email."""
     try:
         conn = get_connection()
+        conn.start_transaction(isolation_level='REPEATABLE READ')
         cursor = conn.cursor()
         query = "UPDATE Users SET name=%s, email=%s WHERE user_id=%s"
         cursor.execute(query, (name, email, user_id))
@@ -151,6 +152,7 @@ def update_apartment(apartment_id, address, city, state, zipcode, bedrooms, bath
     """Prepared statement to update an apartment row."""
     try:
         conn = get_connection()
+        conn.start_transaction(isolation_level='REPEATABLE READ')
         cursor = conn.cursor()
         query = """
             UPDATE Apartments
@@ -170,6 +172,7 @@ def delete_apartment(apartment_id):
     """Prepared statement to delete an apartment (and cascade to listings)."""
     try:
         conn = get_connection()
+        conn.start_transaction(isolation_level='REPEATABLE READ')
         cursor = conn.cursor()
         query = "DELETE FROM Apartments WHERE apartment_id=%s"
         cursor.execute(query, (apartment_id,))
@@ -276,6 +279,7 @@ def update_listing(listing_id, apartment_id, price, from_date, to_date, desc):
     """Prepared statement to update listing details (including apartment_id)."""
     try:
         conn = get_connection()
+        conn.start_transaction(isolation_level='REPEATABLE READ')
         cursor = conn.cursor()
         query = """
             UPDATE Listings
